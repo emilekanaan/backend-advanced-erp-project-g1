@@ -1,4 +1,4 @@
-# Enterprise Resource Planning
+# Enterprise Resource Planning - G1
 
 ## Project Description
 
