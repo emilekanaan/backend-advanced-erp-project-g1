@@ -13,4 +13,17 @@ class evaluation extends Model
         "date",
         
     ];
+    public function employees()
+    {
+        return $this->belongsToMany(Employee::class, 'employee_kpi_evaluation')
+            ->withPivot('kpi_id')
+            ->withTimestamps();
+    }
+
+    public function kpis()
+    {
+        return $this->belongsToMany(Kpi::class, 'employee_kpi_evaluation')
+            ->withPivot('employee_id')
+            ->withTimestamps();
+    }
 }
