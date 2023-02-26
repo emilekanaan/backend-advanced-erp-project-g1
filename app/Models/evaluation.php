@@ -10,7 +10,6 @@ class evaluation extends Model
     use HasFactory;
     protected $fillable=[
         "evaluation",
-        "date",
         
     ];
     public function employees()
