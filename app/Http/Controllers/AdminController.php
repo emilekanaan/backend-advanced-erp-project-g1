@@ -1,9 +1,12 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use Hash;
+use Session;
 use Illuminate\Http\Request;
 use App\Models\Admin;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Contracts\Auth\Authenticatable;
 class AdminController extends Controller
 {
     public function addAdmin(Request $request){
@@ -17,7 +20,7 @@ class AdminController extends Controller
         $admin = new Admin();
         $username=$request->input("username");
         $email=$request->input("email");
-        $password=$request->input("password");
+        $password=bcrypt($request->input("password"));
         $admin->username=$username;
         $admin->email=$email;
         $admin->password=$password;
@@ -43,7 +46,11 @@ class AdminController extends Controller
             try{
             $admin=Admin::find($id);
             $inputs=$request->except('_method'); 
+            if ($request->has('password')) {
+                $inputs['password'] = bcrypt($request->input('password'));
+            }
             $admin->update($inputs); 
+
             return response()->json(['message' => 'Admin successfully updated',
             'admin'=>$admin
             ])  ;
@@ -69,6 +76,20 @@ public function deleteAdmin(Request $request,$id){
         return response()->json(['message' => 'Failed to delete admins.'], 500);
     }
 }
+public function login(Request $request)
+{
+   
+
+    if (Auth::guard('admin')->attempt(['username' => $request->username], $request->remember)) {
+        return redirect()->intended(route('admin.dashboard'));
+    }
+    return redirect()->back()->withInput($request->only('username', 'remember'))->withErrors([
+        'username' => 'These credentials do not match our records.',
+    ]);
+}
+
+
+
 }
 
 
