@@ -28,6 +28,7 @@ class AdminController extends Controller
             return response()->json(['message' => 'Failed to add admin.'], 500);
         }
     }
+
     public function getAdmin(Request $request, $id){
     try{
         $admin =  Admin::where("id",$id)->get();
@@ -39,36 +40,37 @@ class AdminController extends Controller
         }
     }
 
-        public function editAdmin(Request $request, $id){
-            try{
-            $admin=Admin::find($id);
-            $inputs=$request->except('_method'); 
-            $admin->update($inputs); 
-            return response()->json(['message' => 'Admin successfully updated',
-            'admin'=>$admin
-            ])  ;
-            }catch (\Exception $e) {
-                return response()->json(['message' => 'Failed to edit admin.'], 500);
-            }
+    public function editAdmin(Request $request, $id){
+        try{
+        $admin=Admin::find($id);
+        $inputs=$request->except('_method'); 
+        $admin->update($inputs); 
+        return response()->json(['message' => 'Admin successfully updated',
+        'admin'=>$admin
+        ])  ;
+        }catch (\Exception $e) {
+            return response()->json(['message' => 'Failed to edit admin.'], 500);
         }
+    }
        
-        public function getAdmins(){
-    try {
-        $admins = Admin::all();
-        return response()->json($admins, 200);
-    } catch (\Exception $e) {
-        return response()->json(['message' => 'Failed to retrieve admins.'], 500);
+    public function getAdmins(){
+        try {
+            $admins = Admin::all();
+            return response()->json($admins, 200);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Failed to retrieve admins.'], 500);
+        }
     }
-}
-public function deleteAdmin(Request $request,$id){
-    try {
-       $admin=Admin::find($id);
-       $admin->delete();
-       return response()->json(['message' => 'admin deleted successfully']);
-    } catch (\Exception $e) {
-        return response()->json(['message' => 'Failed to delete admins.'], 500);
+
+    public function deleteAdmin(Request $request,$id){
+        try {
+        $admin=Admin::find($id);
+        $admin->delete();
+        return response()->json(['message' => 'admin deleted successfully']);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Failed to delete admins.'], 500);
+        }
     }
-}
 }
 
 
