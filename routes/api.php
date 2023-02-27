@@ -9,8 +9,10 @@ use App\Http\Controllers\EmployeeController;
 
 use App\Http\Controllers\TeamController;
 use App\Http\Controllers\ProjectController;
-use App\Http\Controllers\EvaluationController;
+
 use App\Http\Controllers\RoleController;
+use App\Http\Controllers\employee_kpi;
+
 
 
 
@@ -69,13 +71,20 @@ Route::Patch("/project/{id}", [ProjectController::class, "editProject"]);
 Route::Delete("/project/{id}", [ProjectController::class, "deleteProject"]);
 Route::Get("/project", [ProjectController::class, "getProjects"]);
 
-Route::Post("/evaluation", [EvaluationController::class, "addEvaluation"]);
+
 
 Route::Post('/role',[RoleController::class,'addRole']);
 Route::Get('/role/{id}',[RoleController::class,'getRole']);
 Route::Get('/role',[RoleController::class,'getRoles']);
 Route::Patch('/role/{id}',[RoleController::class,'updateRole']);
 Route::delete('/role/{id}',[RoleController::class,'deleteRole']);
+
+
+
+Route::Post('/evaluation',[employee_Kpi::class,'addEvaluation']);
+Route::Get('/evaluation',[employee_Kpi::class,'getEvaluations']);
+Route::Get('/evaluation/{id}',[employee_Kpi::class,'getEvaluation']);
+Route::Delete('/evaluation/{id}',[employee_Kpi::class,'deleteEvaluation']);
 
 
 
