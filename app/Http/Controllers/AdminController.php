@@ -61,7 +61,7 @@ class AdminController extends Controller
             }
 
         }
-    }
+    
        
     public function getAdmins(){
         try {
@@ -81,7 +81,7 @@ class AdminController extends Controller
             return response()->json(['message' => 'Failed to delete admins.'], 500);
         }
     }
-}
+
 
 public function login(Request $request)
 {
