@@ -10,18 +10,21 @@ class evaluation extends Model
     use HasFactory;
     protected $fillable=[
         "evaluation",
+
+        
+
         
     ];
     public function employees()
     {
-        return $this->belongsToMany(Employee::class, 'employee_kpi_evaluation')
+        return $this->belongsTo(Employee::class, 'employee_kpi_evaluation')
             ->withPivot('kpi_id')
             ->withTimestamps();
     }
 
-    public function kpis()
+    public function Kpi()
     {
-        return $this->belongsToMany(Kpi::class, 'employee_kpi_evaluation')
+        return $this->belongsTo(Kpi::class, 'employee_kpi_evaluation')
             ->withPivot('employee_id')
             ->withTimestamps();
     }

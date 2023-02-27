@@ -18,7 +18,7 @@ return new class extends Migration
             $table->text('email');
             $table->text('phone_num');
             $table->text('picture');
-            $table->unsignedBigInteger('team_id'); 
+            $table->unsignedBigInteger('team_id')->nullable();
             $table->foreign('team_id')->references('id')->on('teams');
             $table->timestamps();
         });

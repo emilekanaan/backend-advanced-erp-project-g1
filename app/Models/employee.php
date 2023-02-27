@@ -17,11 +17,11 @@ class employee extends Model
     ];
 
     public function team(){
-        return $this->belongTo(Team::class);
+        return $this->belongsTo(Team::class);
     }
     public function roles()
     {
-        return $this->belongsToMany(Role::class, 'employee_project_role', 'employee_id', 'role_id')->withPivot('project_id');
+        return $this->belongTo(Role::class, 'employee_project_role', 'employee_id', 'role_id')->withPivot('project_id');
     }
 
     public function projects()
