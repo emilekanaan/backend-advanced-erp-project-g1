@@ -6,10 +6,12 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\KpiController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\EmployeeController;
+
 use App\Http\Controllers\TeamController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\EvaluationController;
 use App\Http\Controllers\RoleController;
+
 
 
 /*
@@ -40,6 +42,7 @@ Route::Get('/report/{id}',[ReportController::class,'getReport']);
 Route::Get('/report',[ReportController::class,'getReports']);
 Route::Patch('/report/{id}',[ReportController::class,'editReport']);
 Route::delete('/report/{id}',[ReportController::class,'deleteReport']);
+
 
 Route::Post('/employee',[EmployeeController::class,'addEmployee']);
 Route::Get('/employee/{id}',[EmployeeController::class,'getEmployee']);
@@ -73,9 +76,6 @@ Route::Get('/role/{id}',[RoleController::class,'getRole']);
 Route::Get('/role',[RoleController::class,'getRoles']);
 Route::Patch('/role/{id}',[RoleController::class,'updateRole']);
 Route::delete('/role/{id}',[RoleController::class,'deleteRole']);
-
-
-
 
 
 
