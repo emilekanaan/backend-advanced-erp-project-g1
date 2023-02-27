@@ -17,7 +17,7 @@ class employee extends Model
     ];
 
     public function team(){
-        return $this->belongTo(Team::class);
+        return $this->belongsTo(Team::class);
     }
     public function roles()
     {
