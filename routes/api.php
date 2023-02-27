@@ -9,6 +9,8 @@ use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\TeamController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\EvaluationController;
+use App\Http\Controllers\RoleController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -66,7 +68,11 @@ Route::Get("/project", [ProjectController::class, "getProjects"]);
 
 Route::Post("/evaluation", [EvaluationController::class, "addEvaluation"]);
 
-
+Route::Post('/role',[RoleController::class,'addRole']);
+Route::Get('/role/{id}',[RoleController::class,'getRole']);
+Route::Get('/role',[RoleController::class,'getRoles']);
+Route::Patch('/role/{id}',[RoleController::class,'updateRole']);
+Route::delete('/role/{id}',[RoleController::class,'deleteRole']);
 
 
 
