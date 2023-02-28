@@ -21,25 +21,12 @@ class employee extends Model
     }
     public function roles()
     {
-        return $this->belongTo(Role::class, 'employee_project_role', 'employee_id', 'role_id')->withPivot('project_id');
+        return $this->hasMany(Role::class, 'employee_project_role');
     }
 
     public function projects()
     {
-        return $this->belongsToMany(Project::class, 'employee_project_role', 'employee_id', 'project_id')->withPivot('role_id');
+        return $this->hasMany(Project::class, 'employee_project_role');
     }
     
-    public function kpis()
-    {
-        return $this->belongsToMany(Kpi::class, 'employee_kpi_evaluation')
-            ->withPivot('evaluation_id')
-            ->withTimestamps();
-    }
-
-    public function evaluations()
-    {
-        return $this->belongsToMany(Evaluation::class, 'employee_kpi_evaluation')
-            ->withPivot('kpi_id')
-            ->withTimestamps();
-    }
 }
