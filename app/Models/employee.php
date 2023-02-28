@@ -29,4 +29,9 @@ class employee extends Model
         return $this->hasMany(Project::class, 'employee_project_role');
     }
     
+
+    public function Employee_kpi() {
+        return $this->hasMany(Employeekpi::class);
+    }
+
 }
