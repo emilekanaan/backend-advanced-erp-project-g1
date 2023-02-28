@@ -10,7 +10,7 @@ use Illuminate\Http\Request;
 class EmployeeController extends Controller
 {
     public function addEmployee(Request $request){
-        
+        try{
          $request->validate([
              
         "first_name"=> 'required',
@@ -42,7 +42,9 @@ class EmployeeController extends Controller
          $employee->save();
          return response()->json([
              'message' => 'employee created successfully'
-         ]);
+         ]);}catch (\Exception $e) {
+            return response()->json(['message' => 'Failed to retrieve employee.'], 500);
+        }
      }
      public function getEmployee(Request $request, $id){
      try{
@@ -80,19 +82,17 @@ class EmployeeController extends Controller
         
          public function getEmployees(){
      try {
-         $employee = Employee::all();
+         $employee = Employee::with(['team'])->get();
          return response()->json($employee, 200);
      } catch (\Exception $e) {
          return response()->json(['message' => 'Failed to retrieve Reports.'], 500);
      }
  }
  public function deleteEmployee(Request $request,$id){
-     try {
+   
         $employee=Employee::find($id);
         $employee->delete();
         return response()->json(['message' => 'employee deleted successfully']);
-     } catch (\Exception $e) {
-         return response()->json(['message' => 'Failed to delete employee.'], 500);
-     }
+    
  } 
 }

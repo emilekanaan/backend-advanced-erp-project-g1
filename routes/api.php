@@ -63,6 +63,10 @@ Route::Delete("/kpi/{id}", [KpiController::class, "deleteKpi"]);
 Route::Post("/team", [TeamController::class, "addTeam"]);
 Route::Get("/team", [TeamController::class, "getTeams"]);
 Route::Get("/team/{id}", [TeamController::class, "getTeam"]);
+Route::Delete("/team/{id}", [TeamController::class, "deleteTeam"]);
+Route::Patch("/team/{id}", [TeamController::class, "editTeam"]);
+
+
 
 Route::Post("/project", [ProjectController::class, "addProject"]);
 Route::Get("/project/{id}", [ProjectController::class, "getProject"]);
