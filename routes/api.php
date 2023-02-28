@@ -85,6 +85,8 @@ Route::Post('/evaluation',[employee_Kpi::class,'addEvaluation']);
 Route::Get('/evaluation',[employee_Kpi::class,'getEvaluations']);
 Route::Get('/evaluation/{id}',[employee_Kpi::class,'getEvaluation']);
 Route::Delete('/evaluation/{id}',[employee_Kpi::class,'deleteEvaluation']);
+Route::Patch('/evaluation/{id}',[employee_Kpi::class,'editEvaluation']);
+
 
 
 

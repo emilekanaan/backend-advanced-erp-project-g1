@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 use App\Models\EmployeeKpi;
-use App\Models\Kpi;
+use App\Models\kpi;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -64,20 +64,27 @@ class employee_kpi extends Controller
         } 
 
         public function editEvaluation(Request $request, $id){
-            try{
+           try{
             $evaluation=EmployeeKpi::find($id);
-            $inputs=$request->except('_method'); 
-           
+            $inputs=$request->except('_method','employee_id','kpi_id'); 
+            if($request->has('employee_id')){
                $employee_id=$request->input('employee_id');
                $employee = employee::find($employee_id);
                $evaluation->employee()->associate($employee);
-            
-            $employee->update($inputs); 
-            return response()->json(['message' => 'employee successfully updated',
-            'employee'=>$employee
-            ])  ;
-            }catch (\Exception $e) {
-                return response()->json(['message' => 'Failed to edit employee.'], 500);
             }
+            if($request->has('kpi_id')){
+
+               $kpi_id=$request->input('kpi_id');
+               $kpi = kpi::find($kpi_id);
+               $evaluation->kpi()->associate($kpi);
+            }
+            $evaluation->update($inputs); 
+            return response()->json(['message' => 'evaluation successfully updated',
+            'evaluation'=>$evaluation
+            ])  ;
+        }catch (\Exception $e) {
+            return response()->json(['message' => 'Failed to retrieve employee.'], 500);
+        }
+            
         }
 }
