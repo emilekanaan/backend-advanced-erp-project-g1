@@ -6,11 +6,11 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\KpiController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\EmployeeController;
-
 use App\Http\Controllers\TeamController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\EvaluationController;
 use App\Http\Controllers\RoleController;
+use App\Http\Controllers\EmployeeProjectRoleController;
 
 
 
@@ -76,6 +76,13 @@ Route::Get('/role/{id}',[RoleController::class,'getRole']);
 Route::Get('/role',[RoleController::class,'getRoles']);
 Route::Patch('/role/{id}',[RoleController::class,'updateRole']);
 Route::delete('/role/{id}',[RoleController::class,'deleteRole']);
+
+Route::Post('/employee-project-role',[EmployeeProjectRoleController::class,'addRole']);
+Route::Get('/employee-project-role',[EmployeeProjectRoleController::class,'getRoles']);
+Route::Get('/employee-project-role/{id}',[EmployeeProjectRoleController::class,'getRole']);
+Route::Patch('/employee-project-role/{id}',[EmployeeProjectRoleController::class,'updateRole']);
+Route::Delete('/employee-project-role/{id}',[EmployeeProjectRoleController::class,'deleteRole']);
+
 
 
 

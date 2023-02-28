@@ -17,11 +17,10 @@ class Project extends Model
     ];
     public function employees()
     {
-        return $this->belongsToMany(Employee::class, 'employee_project_role', 'project_id', 'employee_id')->withPivot('role_id');
+        return $this->hasMany(Employee::class, 'employee_project_role');
     }
 
-    public function roles()
-    {
-        return $this->belongsToMany(Role::class, 'employee_project_role', 'project_id', 'role_id')->withPivot('employee_id');
+    public function role() {
+        return $this->hasMany(Role::class, "employee_project_role");
     }
 }
