@@ -7,6 +7,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Support\Facades\Cookie;
+use Illuminate\Support\Facades\Storage;
 class AdminController extends Controller
 {
     //Get admin
@@ -29,7 +30,12 @@ class AdminController extends Controller
             $admin = User::find($id);
             $inputs = $request->except('_method');
             if ($request->has('password')) {
-                $inputs['password'] = bcrypt($request->input('password'));
+                $inputs['password'] = Hash::make($request->input('password'));
+            }
+            if ($request->hasFile('picture')) {
+                Storage::delete('public/' . $admin->picture);
+                $image_path = $request->file('picture')->store('images', 'public');
+                $admin->update(['picture' => $image_path]);
             }
             $admin->update($inputs);
 
@@ -55,6 +61,7 @@ class AdminController extends Controller
     {
         try {
             $admin = User::find($id);
+            Storage::delete('public/' . $admin->image);
             $admin->delete();
             return response()->json(['message' => 'admin deleted successfully']);
         } catch (Throwable $e) {
@@ -66,10 +73,12 @@ class AdminController extends Controller
     public function register(Request $request)
     {
         try {
+
             return $user = User::create([
                 'name' => $request->input('name'),
                 'email' => $request->input('email'),
                 'password' => Hash::make($request->input('password')),
+                "image" => $request->file("image")->store("images", "public"),
             ]);
         } catch (Throwable $e) {
             report($e);
