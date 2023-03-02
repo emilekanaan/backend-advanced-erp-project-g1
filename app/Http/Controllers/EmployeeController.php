@@ -85,7 +85,7 @@ class EmployeeController extends Controller
     public function getEmployees()
     {
         try {
-            $employee = Employee::with(['team'])->get();
+            $employee = Employee::with(['team'])->paginate(5);
             return response()->json($employee, 200);
         } catch (\Exception $e) {
             return response()->json(['message' => 'Failed to retrieve Reports.'], 500);

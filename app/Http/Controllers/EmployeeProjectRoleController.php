@@ -37,7 +37,7 @@ class EmployeeProjectRoleController extends Controller
 
     public function getRoles(Request $request) {
         try {
-            $employee_project_role = EmployeeProjectRole::with("employee","project", "role")->get();
+            $employee_project_role = EmployeeProjectRole::with("employee","project", "role")->paginate(5);
             return response()->json([
                 "message" => $employee_project_role
             ]);

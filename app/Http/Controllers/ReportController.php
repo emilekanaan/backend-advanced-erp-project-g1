@@ -54,7 +54,7 @@ class ReportController extends Controller
         
          public function getReports(){
      try {
-         $report = Report::all();
+         $report = Report::paginate(5);
          return response()->json($report, 200);
      } catch (\Exception $e) {
          return response()->json(['message' => 'Failed to retrieve Reports.'], 500);
