@@ -29,7 +29,7 @@ class TeamController extends Controller
 
      public function getTeams(){
         try {
-            $team = Team::all();
+            $team = Team::paginate(5);
             return response()->json($team, 200);
         } catch (\Exception $e) {
             return response()->json(['message' => 'Failed to retrieve teams.'], 500);

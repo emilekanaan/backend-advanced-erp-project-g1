@@ -46,7 +46,7 @@ class KpiController extends Controller
 
     public function getKpis(Request $request) {
         try {
-            $kpi = kpi::all();
+            $kpi = kpi::paginate(5);
 
             return response()->json([
                 "message" => $kpi

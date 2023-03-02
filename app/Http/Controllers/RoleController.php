@@ -69,7 +69,7 @@ class RoleController extends Controller
         }
         public function getRoles(){
             try {
-                $roles = Role::all();
+                $roles = Role::paginate(5);
                 return response()->json($roles, 200);
             } catch (\Exception $e) {
                 return response()->json(['message' => 'Failed to retrieve roles.'], 500);

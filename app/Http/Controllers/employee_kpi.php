@@ -14,7 +14,7 @@ class employee_kpi extends Controller
 {
     public function addEvaluation(Request $request){
         $validator = Validator::make($request->all(),[
-            'evaluation'=>'required',
+            'evaluation'=> ["required", Rule::in([1,2,3,4,5,6,7,8,9,10]),],
             'date'=>'required|date',
             'employee_id'=>'required|exists:employees,id',
             'kpi_id'=>'required|exists:kpis,id',
@@ -38,7 +38,7 @@ class employee_kpi extends Controller
     }
     public function getEvaluations(){
        
-            $evaluation = EmployeeKpi::with(['employee','kpi'])->get();
+            $evaluation = EmployeeKpi::with(['employee','kpi'])->paginate(5);;
             return response()->json($evaluation, 200);
         
     }

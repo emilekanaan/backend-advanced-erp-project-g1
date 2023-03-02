@@ -43,7 +43,7 @@ class AdminController extends Controller
     public function getAdmins()
     {
         try {
-            $admins = User::all();
+            $admins = User::paginate(5);
             return response()->json($admins, 200);
         } catch (Throwable $e) {
             report($e);

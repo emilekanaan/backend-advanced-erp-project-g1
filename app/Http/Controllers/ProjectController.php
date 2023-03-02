@@ -61,7 +61,7 @@ class projectController extends Controller
        
         public function getProjects(){
     try {
-        $project = Project::all();
+        $project = Project::paginate(5);
         return response()->json($project, 200);
     } catch (\Exception $e) {
         return response()->json(['message' => 'Failed to retrieve Projects.'], 500);
