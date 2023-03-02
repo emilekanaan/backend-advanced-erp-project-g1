@@ -26,17 +26,17 @@ use App\Http\Controllers\EmployeeController;
 | be assigned to the "api" middleware group. Make something great!
 |
 */
+Route::get('/authenticate',[AdminController::class ,'authenticate'])->name('authenticate');
+Route::post('/admin',[AdminController::class ,'register']);
+Route::post('/admin/login',[AdminController::class ,'login']);
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
-
-Route::Post('/admin',[AdminController::class,'addAdmin']);
+Route::middleware('auth:sanctum')->group(function(){
+Route::get('/admin',[AdminController::class ,'admin']);
+Route::post('/admin/logout',[AdminController::class ,'logout']);
 Route::Get('/admin',[AdminController::class,'getAdmins']);
 Route::Get('/admin/{id}',[AdminController::class,'getAdmin']);
 Route::Patch('/admin/{id}',[AdminController::class,'editAdmin']);
 Route::delete('/admin/{id}',[AdminController::class,'deleteAdmin']);
-Route::post('/admin/login',[AdminController::class,'login']);
 
 Route::Post('/report',[ReportController::class,'addReport']);
 Route::Get('/report/{id}',[ReportController::class,'getReport']);
@@ -97,6 +97,6 @@ Route::Get('/evaluation/{id}',[employee_Kpi::class,'getEvaluation']);
 Route::Delete('/evaluation/{id}',[employee_Kpi::class,'deleteEvaluation']);
 Route::Patch('/evaluation/{id}',[employee_Kpi::class,'editEvaluation']);
 
-
+});
 
 

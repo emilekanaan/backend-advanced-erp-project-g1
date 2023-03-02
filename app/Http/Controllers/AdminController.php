@@ -1,104 +1,128 @@
 <?php
-
 namespace App\Http\Controllers;
 use Hash;
 use Session;
 use Illuminate\Http\Request;
-use App\Models\Admin;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Contracts\Auth\Authenticatable;
+use Illuminate\Support\Facades\Cookie;
 class AdminController extends Controller
 {
-    public function addAdmin(Request $request){
-       try{
-        $request->validate([
-            'username' => 'required|unique:admins|min:3',
-            'email' => 'required|unique:admins|email',
-            'password' => 'required|min:6',
-        ]);
-
-        $admin = new Admin();
-        $username=$request->input("username");
-        $email=$request->input("email");
-        $password=bcrypt($request->input("password"));
-        $admin->username=$username;
-        $admin->email=$email;
-        $admin->password=$password;
-        $admin->save();
-        return response()->json([
-            'message' => 'Admin created successfully'
-        ]);}catch (\Exception $e) {
-            return response()->json(['message' => 'Failed to add admin.'], 500);
+    //Get admin
+    public function getAdmin(Request $request, $id)
+    {
+        try {
+            $admin = User::where('id', $id)->get();
+            return response()->json([
+                'message' => $admin,
+            ]);
+        } catch (Throwable $e) {
+            report($e);
+            return false;
         }
     }
-
-    public function getAdmin(Request $request, $id){
-    try{
-        $admin =  Admin::where("id",$id)->get();
-    
-        return response()->json([
-            'message' => $admin,
-        ]);}catch (\Exception $e) {
-            return response()->json(['message' => 'Failed to retrieve admin.'], 500);
-        }
-    }
-
-
-        public function editAdmin(Request $request, $id){
-            try{
-            $admin=Admin::find($id);
-            $inputs=$request->except('_method'); 
+    //Edit admin
+    public function editAdmin(Request $request, $id)
+    {
+        try {
+            $admin = User::find($id);
+            $inputs = $request->except('_method');
             if ($request->has('password')) {
                 $inputs['password'] = bcrypt($request->input('password'));
             }
-            $admin->update($inputs); 
+            $admin->update($inputs);
 
-            return response()->json(['message' => 'Admin successfully updated',
-            'admin'=>$admin
-            ])  ;
-            }catch (\Exception $e) {
-                return response()->json(['message' => 'Failed to edit admin.'], 500);
-            }
-
+            return response()->json(['message' => 'Admin successfully updated', 'admin' => $admin]);
+        } catch (Throwable $e) {
+            report($e);
+            return false;
         }
-    
-       
-    public function getAdmins(){
+    }
+    //get all the admins
+    public function getAdmins()
+    {
         try {
-            $admins = Admin::all();
+            $admins = User::all();
             return response()->json($admins, 200);
-        } catch (\Exception $e) {
-            return response()->json(['message' => 'Failed to retrieve admins.'], 500);
+        } catch (Throwable $e) {
+            report($e);
+            return false;
         }
     }
-
-    public function deleteAdmin(Request $request,$id){
+    //delete admin
+    public function deleteAdmin(Request $request, $id)
+    {
         try {
-        $admin=Admin::find($id);
-        $admin->delete();
-        return response()->json(['message' => 'admin deleted successfully']);
-        } catch (\Exception $e) {
-            return response()->json(['message' => 'Failed to delete admins.'], 500);
+            $admin = User::find($id);
+            $admin->delete();
+            return response()->json(['message' => 'admin deleted successfully']);
+        } catch (Throwable $e) {
+            report($e);
+            return false;
         }
     }
-
-
-public function login(Request $request)
-{
-   
-
-    if (Auth::guard('admin')->attempt(['username' => $request->username], $request->remember)) {
-        return redirect()->intended(route('admin.dashboard'));
+    //add new admin
+    public function register(Request $request)
+    {
+        try {
+            return $user = User::create([
+                'name' => $request->input('name'),
+                'email' => $request->input('email'),
+                'password' => Hash::make($request->input('password')),
+            ]);
+        } catch (Throwable $e) {
+            report($e);
+            return false;
+        }
     }
-    return redirect()->back()->withInput($request->only('username', 'remember'))->withErrors([
-        'username' => 'These credentials do not match our records.',
-    ]);
+    //login
+    public function login(Request $request)
+    {
+        if (!Auth::attempt($request->only('email', 'password'))) {
+            return response(
+                [
+                    'message' => 'Login failed',
+                ],
+                status: 401,
+            );
+        }
+        $user = Auth::user();
+        $jwt_name = env('JWT_SECRET');
+        $token = $user->createToken('token')->plainTextToken;
+        $cookie = cookie($jwt_name, $token, 68 * 24);
+        return response([
+            'message' => 'Success',
+        ])->withCookie($cookie);
+    }
+    //Auth admin
+    public function user()
+    {
+        try {
+            return Auth::user();
+        } catch (Throwable $e) {
+            report($e);
+            return response([
+                'message' => 'Success',
+            ]);
+        }
+    }
+    public function authenticate()
+    {
+        return response(['message' => 'please login first']);
+    }
+    //logout admin
+    public function logout()
+    {
+    
+        Auth::user()->tokens->each(function($token, $key) {
+            $token->delete();
+        });
+    
+        return response()->json([
+            'message' => 'Logged out successfully!',
+            'status_code' => 200
+        ], 200);
+
+    }
 }
-
-
-
-}
-
-
-
-
