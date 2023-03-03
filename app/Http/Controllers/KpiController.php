@@ -46,6 +46,17 @@ class KpiController extends Controller
 
     public function getKpis(Request $request) {
         try {
+            if($name=$request->query('search')){
+                $kpi = kpi::where('name', 'LIKE', '%' . $name . '%')->paginate(20);
+        
+                if (!$kpi) {
+                    return response()->json(['message' => 'kpi not found'], 404);
+                }
+                return response()->json([
+                    'message' => 'kpi retrive successfully',
+                    'kpis' => $kpi,
+                ]);
+            }
             $kpi = kpi::paginate(5);
 
             return response()->json([

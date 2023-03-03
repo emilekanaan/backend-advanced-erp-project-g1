@@ -1,12 +1,9 @@
 <?php
-
 namespace App\Http\Controllers;
 use App\Models\employee;
 use App\Models\Team;
 use Illuminate\Support\Facades\Storage;
-
 use Illuminate\Http\Request;
-
 class EmployeeController extends Controller
 {
     public function addEmployee(Request $request)
@@ -82,18 +79,25 @@ class EmployeeController extends Controller
         }
     }
 
-    public function getEmployees()
+    public function getEmployees(Request $request)
     {
-        try {
-            $employee = Employee::with(['team'])->paginate(5);
-            return response()->json($employee, 200);
-        } catch (\Exception $e) {
-            return response()->json(['message' => 'Failed to retrieve Reports.'], 500);
+        if ($name = $request->query('search')) {
+            $employee = Employee::where('first_name', 'LIKE', '%' . $name . '%')->paginate(5);
+            if (!$employee) {
+                return response()->json(['message' => 'employee not found'], 404);
+            }
+            return response()->json([
+                'message' => 'employee retrive successfully',
+                'employees' => $employee,
+            ]);
         }
+        $employee = Employee::with(['team'])->paginate(20);
+        return response()->json($employee, 200);
     }
     public function deleteEmployee(Request $request, $id)
     {
         $employee = Employee::find($id);
+        Storage::delete('public/' . $employee->picture);
         $employee->delete();
         return response()->json(['message' => 'employee deleted successfully']);
     }

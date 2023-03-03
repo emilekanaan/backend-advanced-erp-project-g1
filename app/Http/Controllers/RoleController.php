@@ -11,7 +11,7 @@ class RoleController extends Controller
     public function addRole (Request $request){
         try{
             $request->validate([
-            "role1"=>"reaquired"
+            "role1"=>"reaquired|unique"
         ]);
         $role= new role;
         $role1=$request->input('role');
@@ -67,8 +67,20 @@ class RoleController extends Controller
             ]);
         }
         }
-        public function getRoles(){
+        public function getRoles(Request $request){
             try {
+                    if($name=$request->query('search')){
+                    $role = role::where('role', 'LIKE', '%' . $name . '%')->paginate(20);
+            
+                    if (!$role) {
+                        return response()->json(['message' => 'role not found'], 404);
+                    }
+                    return response()->json([
+                        'message' => 'role retrive successfully',
+                        'roles' => $role,
+                    ]);
+                }
+                
                 $roles = Role::paginate(5);
                 return response()->json($roles, 200);
             } catch (\Exception $e) {
