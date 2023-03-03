@@ -36,12 +36,19 @@ class employee_kpi extends Controller
             'employee_kpi' => $employee_kpi
         ]);
     }
-    public function getEvaluations(){
-       
+    public function getEvaluations(Request $request){
+    try{
+     
             $evaluation = EmployeeKpi::with(['employee','kpi'])->paginate(5);;
             return response()->json($evaluation, 200);
-        
+    }catch (\Exception $e) {
+        return response()->json(['message' => 'Failed to retrieve employee.'], 500);
     }
+
+    }
+
+
+
     public function getEvaluation(Request $request, $id){
         try{
             $evaluation =  EmployeeKpi::where("id",$id)->with(['employee','kpi'])->get();
