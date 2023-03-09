@@ -8,6 +8,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Storage;
+use Validator;
+
 class AdminController extends Controller
 {
     //Get admin
@@ -86,24 +88,20 @@ class AdminController extends Controller
         }
     }
     //login
-    public function login(Request $request)
-    {
-        if (!Auth::attempt($request->only('email', 'password'))) {
-            return response(
-                [
-                    'message' => 'Login failed',
-                ],
-                status: 401,
-            );
+   public function login(Request $request){
+    	$validator = Validator::make($request->all(), [
+            'email' => 'required|email',
+            'password' => 'required|string|min:6',
+        ]);
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 422);
         }
-        $user = Auth::user();
-        $jwt_name = env('JWT_SECRET');
-        $token = $user->createToken('token')->plainTextToken;
-        $cookie = cookie($jwt_name, $token, 68 * 24);
-        return response([
-            'message' => 'Success',
-        ])->withCookie($cookie);
+        if (! $token = auth()->attempt($validator->validated())) {
+            return response()->json(['error' => 'Unauthorized'], 401);
+        }
+        return $this->createNewToken($token);
     }
+
     //Auth admin
     public function user()
     {
@@ -120,6 +118,16 @@ class AdminController extends Controller
     {
         return response(['message' => 'please login first']);
     }
+    //create a new token
+     protected function createNewToken($token){
+        return response()->json([
+            'access_token' => $token,
+            'token_type' => 'bearer',
+            'expires_in' => auth()->factory()->getTTL() * 60,
+            'admin' => auth()->user()
+        ]);
+    }
+
     //logout admin
     public function logout()
     {
