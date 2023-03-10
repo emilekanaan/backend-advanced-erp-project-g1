@@ -14,7 +14,7 @@ class employee_kpi extends Controller
 {
     public function addEvaluation(Request $request){
         $validator = Validator::make($request->all(),[
-            'evaluation'=> ["required", Rule::in([1,2,3,4,5,6,7,8,9,10]),],
+            'evaluation'=> ["required"],
             'date'=>'required|date',
             'employee_id'=>'required|exists:employees,id',
             'kpi_id'=>'required|exists:kpis,id',
@@ -45,6 +45,14 @@ class employee_kpi extends Controller
         return response()->json(['message' => 'Failed to retrieve employee.'], 500);
     }
 
+    }  public function countEmployees()
+    {
+        try{
+        $count = Employee::count();
+        return response()->json($count, 200);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Failed to update team.'], 500);
+        }
     }
 
 
@@ -94,4 +102,5 @@ class employee_kpi extends Controller
         }
             
         }
+       
 }

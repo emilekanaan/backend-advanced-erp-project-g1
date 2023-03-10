@@ -76,4 +76,5 @@ public function deleteProject(Request $request,$id){
         return response()->json(['message' => 'Failed to delete project.'], 500);
     }
 } 
+
 }

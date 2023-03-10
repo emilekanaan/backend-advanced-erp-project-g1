@@ -29,18 +29,6 @@ class TeamController extends Controller
 
      public function getTeams(){
         try {
-
-            if($name=$request->query('search')){
-                $team = Team::where('name', 'LIKE', '%' . $name . '%')->paginate(20);
-        
-                if (!$team) {
-                    return response()->json(['message' => 'team not found'], 404);
-                }
-                return response()->json([
-                    'message' => 'team retrive successfully',
-                    'team' => $team,
-                ]);
-            }
             $team = Team::paginate(5);
             return response()->json($team, 200);
         } catch (\Exception $e) {
@@ -85,5 +73,7 @@ class TeamController extends Controller
         return response()->json(['message' => 'Failed to update team.'], 500);
     }
 }
+
+
 
 }

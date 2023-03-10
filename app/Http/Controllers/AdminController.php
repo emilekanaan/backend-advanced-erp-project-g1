@@ -7,6 +7,8 @@ use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Support\Facades\Cookie;
+use Illuminate\Support\Facades\Validator;
+
 class AdminController extends Controller
 {
     //Get admin
@@ -111,6 +113,15 @@ class AdminController extends Controller
     {
         return response(['message' => 'please login first']);
     }
+    protected function createNewToken($token){
+        return response()->json([
+            'access_token' => $token,
+            'token_type' => 'bearer',
+            'expires_in' => auth()->factory()->getTTL() * 60,
+            'admin' => auth()->user()
+        ]);
+    }
+
     //logout admin
     public function logout()
     {
