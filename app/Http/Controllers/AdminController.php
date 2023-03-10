@@ -7,8 +7,8 @@ use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Support\Facades\Cookie;
-use Illuminate\Support\Facades\Storage;
-use Validator;
+use Illuminate\Support\Facades\Validator;
+
 
 class AdminController extends Controller
 {
@@ -118,8 +118,8 @@ class AdminController extends Controller
     {
         return response(['message' => 'please login first']);
     }
-    //create a new token
-     protected function createNewToken($token){
+
+    protected function createNewToken($token){
         return response()->json([
             'access_token' => $token,
             'token_type' => 'bearer',

@@ -2,6 +2,10 @@
 namespace App\Http\Controllers;
 use App\Models\employee;
 use App\Models\Team;
+use App\Models\EmployeeKpi;
+use App\Models\Role;
+use App\Models\Project;
+
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
 class EmployeeController extends Controller
@@ -44,17 +48,13 @@ class EmployeeController extends Controller
     }
     public function getEmployee(Request $request, $id)
     {
-        try {
-            $employee = Employee::where('id', $id)
-                ->with(['team'])
-                ->get();
+        $employee = Employee::where('id', $id)
+            ->with(['team', 'projects', 'roles'])
+            ->get();
 
-            return response()->json([
-                'message' => $employee,
-            ]);
-        } catch (\Exception $e) {
-            return response()->json(['message' => 'Failed to retrieve employee.'], 500);
-        }
+        return response()->json([
+            'message' => $employee,
+        ]);
     }
 
     public function editEmployee(Request $request, $id)
@@ -101,4 +101,8 @@ class EmployeeController extends Controller
         $employee->delete();
         return response()->json(['message' => 'employee deleted successfully']);
     }
+  
+  
+ 
+    
 }
