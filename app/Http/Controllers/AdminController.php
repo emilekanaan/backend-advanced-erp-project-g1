@@ -9,6 +9,7 @@ use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Validator;
 
+
 class AdminController extends Controller
 {
     //Get admin
@@ -31,7 +32,12 @@ class AdminController extends Controller
             $admin = User::find($id);
             $inputs = $request->except('_method');
             if ($request->has('password')) {
-                $inputs['password'] = bcrypt($request->input('password'));
+                $inputs['password'] = Hash::make($request->input('password'));
+            }
+            if ($request->hasFile('picture')) {
+                Storage::delete('public/' . $admin->picture);
+                $image_path = $request->file('picture')->store('images', 'public');
+                $admin->update(['picture' => $image_path]);
             }
             $admin->update($inputs);
 
@@ -57,6 +63,7 @@ class AdminController extends Controller
     {
         try {
             $admin = User::find($id);
+            Storage::delete('public/' . $admin->image);
             $admin->delete();
             return response()->json(['message' => 'admin deleted successfully']);
         } catch (Throwable $e) {
@@ -68,10 +75,12 @@ class AdminController extends Controller
     public function register(Request $request)
     {
         try {
+
             return $user = User::create([
                 'name' => $request->input('name'),
                 'email' => $request->input('email'),
                 'password' => Hash::make($request->input('password')),
+                "image" => $request->file("image")->store("images", "public"),
             ]);
         } catch (Throwable $e) {
             report($e);
@@ -79,24 +88,20 @@ class AdminController extends Controller
         }
     }
     //login
-    public function login(Request $request)
-    {
-        if (!Auth::attempt($request->only('email', 'password'))) {
-            return response(
-                [
-                    'message' => 'Login failed',
-                ],
-                status: 401,
-            );
+   public function login(Request $request){
+    	$validator = Validator::make($request->all(), [
+            'email' => 'required|email',
+            'password' => 'required|string|min:6',
+        ]);
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 422);
         }
-        $user = Auth::user();
-        $jwt_name = env('JWT_SECRET');
-        $token = $user->createToken('token')->plainTextToken;
-        $cookie = cookie($jwt_name, $token, 68 * 24);
-        return response([
-            'message' => 'Success',
-        ])->withCookie($cookie);
+        if (! $token = auth()->attempt($validator->validated())) {
+            return response()->json(['error' => 'Unauthorized'], 401);
+        }
+        return $this->createNewToken($token);
     }
+
     //Auth admin
     public function user()
     {
@@ -113,6 +118,7 @@ class AdminController extends Controller
     {
         return response(['message' => 'please login first']);
     }
+
     protected function createNewToken($token){
         return response()->json([
             'access_token' => $token,

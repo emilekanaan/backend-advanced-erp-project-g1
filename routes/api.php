@@ -24,6 +24,7 @@ use App\Http\Controllers\EmployeeController;
 | be assigned to the "api" middleware group. Make something great!
 |
 */
+
 Route::get('/authenticate', [AdminController::class, 'authenticate'])->name('authenticate');
 Route::post('/admin', [AdminController::class, 'register']);
 Route::post('/admin/login', [AdminController::class, 'login']);
@@ -91,4 +92,5 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::Get('/month',[CountController::class,'Month']);
     
 });
+
 
