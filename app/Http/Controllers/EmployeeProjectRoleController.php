@@ -51,7 +51,8 @@ class EmployeeProjectRoleController extends Controller
 
     public function getRole(Request $request, $id) {
         try {
-            $employee_project_role = EmployeeProjectRole::with("employee","project", "role")->find($id);
+            $employee_project_role =  EmployeeProjectRole::where("employee_id",$id)->with(["employee","project", "role"])->get();
+
             return response()->json([
                 "message" => $employee_project_role
             ]);
