@@ -24,12 +24,14 @@ use App\Http\Controllers\EmployeeController;
 | be assigned to the "api" middleware group. Make something great!
 |
 */
+Route::post('/login', [AdminController::class, 'login']);
+Route::post('/register', [AdminController::class, 'register']);
 
-Route::get('/authenticate', [AdminController::class, 'authenticate'])->name('authenticate');
-Route::post('/admin', [AdminController::class, 'register']);
-Route::post('/admin/login', [AdminController::class, 'login']);
+Route::middleware(['authorize'])->group(function () {
+    // put your protected routes here
+    Route::Get('/employee', [EmployeeController::class, 'getEmployees']);
+    Route::get('/authenticate', [AdminController::class, 'authenticate'])->name('authenticate');
 
-Route::middleware('auth:sanctum')->group(function () {
     Route::get('/admin', [AdminController::class, 'admin']);
     Route::post('/admin/logout', [AdminController::class, 'logout']);
     Route::Get('/admin', [AdminController::class, 'getAdmins']);
@@ -77,7 +79,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::Get('/count', [CountController::class, 'count']);
     Route::Get('/lastsUpdate', [CountController::class, 'lastsUpdate']);
     Route::Get('/month', [CountController::class, 'Month']);
-    Route::Get('/employee', [EmployeeController::class, 'getEmployees']);
     Route::Get('/employee/{id}', [EmployeeController::class, 'getEmployee']);
     Route::Get('/evaluation/{id}', [employee_Kpi::class, 'getEvaluation']);
     Route::Post('/evaluation', [employee_Kpi::class, 'addEvaluation']);

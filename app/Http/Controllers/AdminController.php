@@ -80,7 +80,7 @@ class AdminController extends Controller
                 'name' => $request->input('name'),
                 'email' => $request->input('email'),
                 'password' => Hash::make($request->input('password')),
-                "image" => $request->file("image")->store("images", "public"),
+                "picture" => $request->file("picture")->store("images", "public"),
             ]);
         } catch (Throwable $e) {
             report($e);
