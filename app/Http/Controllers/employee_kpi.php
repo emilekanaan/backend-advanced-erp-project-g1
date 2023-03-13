@@ -59,7 +59,7 @@ class employee_kpi extends Controller
 
     public function getEvaluation(Request $request, $id){
         try{
-            $evaluation =  EmployeeKpi::where("id",$id)->with(['employee','kpi'])->get();
+            $evaluation =  EmployeeKpi::where("employee_id",$id)->with(['employee','kpi'])->get();
         
             return response()->json([
                 'message' => $evaluation,

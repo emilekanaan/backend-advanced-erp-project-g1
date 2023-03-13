@@ -12,7 +12,7 @@ class EmployeeController extends Controller
 {
     public function addEmployee(Request $request)
     {
-        try {
+ 
             $request->validate([
                 'first_name' => 'required',
                 'last_name' => 'required',
@@ -42,14 +42,12 @@ class EmployeeController extends Controller
             return response()->json([
                 'message' => 'employee created successfully',
             ]);
-        } catch (\Exception $e) {
-            return response()->json(['message' => 'Failed to retrieve employee.'], 500);
-        }
+       
     }
     public function getEmployee(Request $request, $id)
     {
         $employee = Employee::where('id', $id)
-            ->with(['team', 'projects', 'roles'])
+            ->with(['team'])
             ->get();
 
         return response()->json([
