@@ -66,7 +66,6 @@ Route::middleware(['authorize'])->group(function () {
     Route::Patch('/role/{id}', [RoleController::class, 'updateRole']);
     Route::delete('/role/{id}', [RoleController::class, 'deleteRole']);
 
-    Route::Post('/employee-project-role', [EmployeeProjectRoleController::class, 'addRole']);
     Route::Get('/employee-project-role', [EmployeeProjectRoleController::class, 'getRoles']);
     Route::Patch('/employee-project-role/{id}', [EmployeeProjectRoleController::class, 'updateRole']);
     Route::Delete('/employee-project-role/{id}', [EmployeeProjectRoleController::class, 'deleteRole']);
@@ -92,4 +91,11 @@ Route::middleware(['authorize'])->group(function () {
     Route::Post('/project', [ProjectController::class, 'addProject']);
     Route::Patch('/project/{id}', [ProjectController::class, 'editProject']);
     Route::Delete('/project/{id}', [ProjectController::class, 'deleteProject']);
+Route::Get('/projectTeam/{id}', [ProjectController::class, 'getprojectTeam']);
+Route::Get('/employeeteam/{id}', [EmployeeController::class, 'getemployeeTeam']);
+Route::Post('/employee-project-role', [EmployeeProjectRoleController::class, 'addRole']);
+Route::Get('/employee-role/{id}/{id1}', [EmployeeProjectRoleController::class, 'getRoleproject']);
+    
+
 });
+

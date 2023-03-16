@@ -100,7 +100,20 @@ class EmployeeController extends Controller
         return response()->json(['message' => 'employee deleted successfully']);
     }
   
-  
+    public function getemployeeTeam(Request $request, $id) {
+        try {
+            $employee =  Employee::where("team_id",$id)->get();
+
+            return response()->json([
+                "message" => $employee
+            ]);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                "message" => $e->message
+            ]);
+        }
+    }
  
     
 }

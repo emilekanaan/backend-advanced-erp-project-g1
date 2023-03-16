@@ -36,10 +36,10 @@ class CountController extends Controller
         $lastTwoRows3 = Team::orderBy('id', 'desc')
             ->take(2)
             ->get();
-        $lastTwoRows4 = EmployeeKpi::orderBy('id', 'desc')
+        $lastTwoRows4 = kpi::orderBy('id', 'desc')
             ->take(2)
             ->get();
-        $lastTwoRows5 = EmployeeProjectRole::orderBy('id', 'desc')
+        $lastTwoRows5 = Role::orderBy('id', 'desc')
             ->take(2)
             ->get();
 
