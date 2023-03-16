@@ -79,4 +79,18 @@ class projectController extends Controller
             return response()->json(['message' => 'Failed to delete project.'], 500);
         }
     }
+    public function getprojectTeam(Request $request, $id) {
+        try {
+            $project =  Project::where("team_id",$id)->get();
+
+            return response()->json([
+                "message" => $project
+            ]);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                "message" => $e->message
+            ]);
+        }
+    }
 }

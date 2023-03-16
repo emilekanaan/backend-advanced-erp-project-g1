@@ -116,4 +116,20 @@ class EmployeeProjectRoleController extends Controller
             ]);
         }
     }
+    public function getRoleproject(Request $request, $id,$id1) {
+        try {
+            $employee_project_role =  EmployeeProjectRole::where("Project_id",$id)->where("employee_id", $id1)->with(["employee","project", "role"])->get();
+    
+            return response()->json([
+                "message" => $employee_project_role
+            ]);
+    
+        } catch (\Exception $e) {
+            return response()->json([
+                "message" => $e->message
+            ]);
+        }
+    }
+    
 }
+
