@@ -21,7 +21,7 @@ class TeamController extends Controller
        
          $team->save();
          return response()->json([
-             'message' => 'team created successfully'
+             'message' => $team
          ]);}catch (\Exception $e) {
              return response()->json(['message' => 'Failed to add team.'], 500);
          }
@@ -29,7 +29,7 @@ class TeamController extends Controller
 
      public function getTeams(){
         try {
-            $team = Team::paginate(5);
+            $team = Team::get();
             return response()->json($team, 200);
         } catch (\Exception $e) {
             return response()->json(['message' => 'Failed to retrieve teams.'], 500);
@@ -47,15 +47,14 @@ class TeamController extends Controller
     }
     
     public function deleteTeam(Request $request, $id){
-        try {
+     
             $team = Team::find($id);  
             $team->delete();
             return response()->json([
                 "message" => "team deleted successfully!"
             ]);
-    }catch (\Exception $e) {
-        return response()->json(['message' => 'Failed to get team.'], 500);
-    }}
+   
+    }
     public function editTeam(Request $request, $id)
 {
     try {

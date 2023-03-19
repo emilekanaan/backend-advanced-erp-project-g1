@@ -37,7 +37,7 @@ class EmployeeProjectRoleController extends Controller
 
     public function getRoles(Request $request) {
         try {
-            $employee_project_role = EmployeeProjectRole::with("employee","project", "role")->paginate(5);
+            $employee_project_role = EmployeeProjectRole::with("employee","project", "role");
             return response()->json([
                 "message" => $employee_project_role
             ]);
@@ -63,6 +63,7 @@ class EmployeeProjectRoleController extends Controller
             ]);
         }
     }
+    
 
     public function updateRole(Request $request, $id) {
         try {
@@ -118,7 +119,7 @@ class EmployeeProjectRoleController extends Controller
     }
     public function getRoleproject(Request $request, $id,$id1) {
         try {
-            $employee_project_role =  EmployeeProjectRole::where("Project_id",$id)->where("employee_id", $id1)->with(["employee","project", "role"])->get();
+            $employee_project_role =  EmployeeProjectRole::where("Project_id",$id)->where("employee_id", $id1)->with([ "role"])->get();
     
             return response()->json([
                 "message" => $employee_project_role

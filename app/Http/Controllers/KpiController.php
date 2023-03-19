@@ -19,7 +19,7 @@ class KpiController extends Controller
             $kpi->save();
             
             return response()->json([
-                "message" => "kpi name: $name added successfully"
+                "message" => $kpi
             ]);
 
         } catch (\Exception $e) {
@@ -57,7 +57,7 @@ class KpiController extends Controller
                     'kpis' => $kpi,
                 ]);
             }
-            $kpi = kpi::paginate(5);
+            $kpi = kpi::get();
 
             return response()->json([
                 "message" => $kpi

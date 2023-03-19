@@ -4,11 +4,12 @@ namespace App\Http\Controllers;
 use App\Models\Project;
 use App\Models\Team;
 use Illuminate\Http\Request;
+use App\Models\EmployeeProjectRole;
 
 class projectController extends Controller
 {
     public function addProject(Request $request)
-    {
+    {  try {
         $request->validate([
             'name' => 'required',
             'team_id' => 'nullable|exists:teams,id',
@@ -24,19 +25,19 @@ class projectController extends Controller
         $project->team()->associate($team);
         $project->save();
         return response()->json([
-            'message' => 'project created successfully',
+            'message' => $project,
         ]);
+    } catch (\Exception $e) {
+        return response()->json(['message' => 'Failed to retrieve project.'], 500);
+    }
     }
     public function getProject(Request $request, $id)
     {
         try {
-            $project = Project::where('id', $id)
-                ->with(['team'])
-                ->get();
-
-            return response()->json([
-                'message' => $project,
-            ]);
+            // $project = EmployeeProjectRole::where('project_id', $id&&"employee.team_id","project.team_id")->with("employee", "role")->get();
+            $project = Project::where('team_id', $id)
+            ->get();
+            return response()->json($project, 200);
         } catch (\Exception $e) {
             return response()->json(['message' => 'Failed to retrieve project.'], 500);
         }
@@ -63,7 +64,7 @@ class projectController extends Controller
     public function getProjects()
     {
         try {
-            $project = Project::with(['team'])->paginate(5);
+            $project = Project::with(['team'])->get();
             return response()->json($project, 200);
         } catch (\Exception $e) {
             return response()->json(['message' => 'Failed to retrieve Projects.'], 500);
@@ -79,18 +80,19 @@ class projectController extends Controller
             return response()->json(['message' => 'Failed to delete project.'], 500);
         }
     }
-    public function getprojectTeam(Request $request, $id) {
+    public function getprojectTeam(Request $request, $id)
+    {
         try {
-            $project =  Project::where("team_id",$id)->get();
+            $project = Project::where('team_id', $id)->get();
 
             return response()->json([
-                "message" => $project
+                'message' => $project,
             ]);
-
         } catch (\Exception $e) {
             return response()->json([
-                "message" => $e->message
+                'message' => $e->message,
             ]);
         }
     }
+    
 }

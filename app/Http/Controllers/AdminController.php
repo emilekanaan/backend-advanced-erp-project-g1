@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Storage;
 
 
 class AdminController extends Controller
@@ -34,10 +35,10 @@ class AdminController extends Controller
             if ($request->has('password')) {
                 $inputs['password'] = Hash::make($request->input('password'));
             }
-            if ($request->hasFile('picture')) {
+            if ($request->hasFile('image')) {
                 Storage::delete('public/' . $admin->picture);
                 $image_path = $request->file('picture')->store('images', 'public');
-                $admin->update(['picture' => $image_path]);
+                $admin->update(['image' => $image_path]);
             }
             $admin->update($inputs);
 
@@ -51,7 +52,7 @@ class AdminController extends Controller
     public function getAdmins()
     {
         try {
-            $admins = User::paginate(5);
+            $admins = User::get();
             return response()->json($admins, 200);
         } catch (Throwable $e) {
             report($e);
@@ -80,7 +81,8 @@ class AdminController extends Controller
                 'name' => $request->input('name'),
                 'email' => $request->input('email'),
                 'password' => Hash::make($request->input('password')),
-                "picture" => $request->file("picture")->store("images", "public"),
+                "image" => $request->file("image")->store("pictures", "public"),
+
             ]);
         } catch (Throwable $e) {
             report($e);
