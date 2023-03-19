@@ -33,7 +33,7 @@ class employee_kpi extends Controller
         $employee_kpi->save();
         return response()->json([
             'message' => 'employee created successfully',
-            'employee_kpi' => $employee_kpi
+            'employee_kpi' =>$employee_kpi
         ]);
     }
     public function getEvaluations(Request $request){

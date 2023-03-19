@@ -19,7 +19,7 @@ class RoleController extends Controller
         $role->save();
 
         return response()->json([
-            "message"=>"role:$role1 added successfully"
+            "message"=>$role
         ]);
     }catch(\Exception $e){
         return response()->json([
@@ -81,7 +81,7 @@ class RoleController extends Controller
                     ]);
                 }
                 
-                $roles = Role::paginate(5);
+                $roles = Role::get();
                 return response()->json($roles, 200);
             } catch (\Exception $e) {
                 return response()->json(['message' => 'Failed to retrieve roles.'], 500);

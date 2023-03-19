@@ -40,7 +40,7 @@ class EmployeeController extends Controller
             $employee->team()->associate($team);
             $employee->save();
             return response()->json([
-                'message' => 'employee created successfully',
+                'message' => $employee::with(['team']),
             ]);
        
     }
@@ -89,7 +89,7 @@ class EmployeeController extends Controller
                 'employees' => $employee,
             ]);
         }
-        $employee = Employee::with(['team'])->paginate(20);
+        $employee = Employee::with(['team'])->get();
         return response()->json($employee, 200);
     }
     public function deleteEmployee(Request $request, $id)
